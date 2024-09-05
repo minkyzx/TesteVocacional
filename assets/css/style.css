@@ -20,7 +20,9 @@ header {
 
 /* Quadrado */
 .quadrado {
-    background-color: #072442;
+    background: linear-gradient(135deg, #07315e, #1b568d); 
+    /* Gradiente de azul escuro para um tom de azul mais claro */
+    
     width: 100%;
     height: 500px;
     display: flex;
@@ -72,7 +74,7 @@ header {
 
 /* Footer */
 footer {
-    background-color: #072442;
+    background-color: #030a12;
     color: white;
     text-align: center;
     padding: 7.5px 0;
