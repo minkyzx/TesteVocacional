@@ -33,7 +33,6 @@
             quais cursos mais combinam 
         com o perfil da pessoa com base nos seus interesses e gostos.</p>
 
-        <p class="text2"></p>
     </div>
 </div>
 <div class="container">
