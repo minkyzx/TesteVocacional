@@ -17,4 +17,3 @@ $_SESSION['respostas'] = array();
 header("Location: pergunta.php");
 exit;
 ?>
-i
