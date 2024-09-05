@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo de Layout</title>
+    <title>Teste Vocacional</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
         <h3 class="text">Sabe aquela ajuda que faltava para
         você escolher qual carreira seguir?</h3>
         <p class="text">Faça o teste vocacional da FAMEC e descubra o seu maior talento.</p>
-        <button id="bot">Fazer teste vocacional</button>
+        <a href="teste.php"><button id="bot">Fazer teste vocacional</button></a>
     </div>
     </div>
 
