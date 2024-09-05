@@ -8,7 +8,7 @@ body {
 header {
     background-color: #030a12;
     color: white;
-    padding: 15px;
+    padding: 25px;
     text-align: center;
 }
 
@@ -47,6 +47,8 @@ header {
     color: white;
     font-size: 1.5rem; /* Ajusta o tamanho da fonte */
     margin-bottom: 10px; /* Espaço abaixo do título */
+    margin: 5%;
+    white-space: pre-line;
 }
 
 .quadrado p {
@@ -54,6 +56,13 @@ header {
     font-size: 1rem; /* Tamanho padrão da fonte do parágrafo */
 }
 
+#q1 {
+    margin-left: 10%;
+}
+
+#bot {
+    margin-left: 36%;
+}
 
 /* Conteúdo */
 .conteudo {

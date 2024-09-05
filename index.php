@@ -11,12 +11,14 @@
         <img id="logo" src="assets/img/LogoFAMEC.png" alt="logo">
     </header>
 
-    <div id="q1" class="quadrado">
+    <div class="quadrado">
         <img id="logo2" src="assets/img/logo.png" alt="">
-        <div>
+        <div id="q1">
         <h3 class="text">Sabe aquela ajuda que faltava para
         você escolher qual carreira seguir?</h3>
-        <p class="text">Faça o teste vocacional da FAMEC e descubra o seu maior talento.</p></div>
+        <p class="text">Faça o teste vocacional da FAMEC e descubra o seu maior talento.</p>
+        <button id="bot">Fazer teste vocacional</button>
+    </div>
     </div>
 
     <div class="conteudo">
