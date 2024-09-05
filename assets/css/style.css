@@ -6,7 +6,7 @@ body {
 
 /* Cabeçalho */
 header {
-    background-color: #030a12;
+    background-color: #0c1929;
     color: white;
     padding: 25px;
     text-align: center;
@@ -20,9 +20,8 @@ header {
 
 /* Quadrado */
 .quadrado {
-    background: linear-gradient(135deg, #082544, #1b568d); 
+    background: linear-gradient(135deg, #01264e, #0b4b86); 
     /* Gradiente de azul escuro para um tom de azul mais claro */
-    
     width: 100%;
     height: 500px;
     display: flex;
@@ -63,7 +62,29 @@ header {
 }
 
 #bot {
-    margin-left: 36%;
+    background-color: #a37d29; /* Cor de fundo */
+    margin-left: 25%;
+    margin-top: 5%;
+    border: none; /* Remove a borda padrão */
+    color: white; /* Cor do texto */
+    padding: 15px 32px; /* Espaçamento interno (padding) */
+    text-decoration: none; /* Remove o sublinhado */
+    font-size: 16px; /* Tamanho da fonte */
+    cursor: pointer; /* Muda o cursor para uma mão ao passar por cima */
+    border-radius: 8px; /* Bordas arredondadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para dar um efeito de elevação */
+    transition: background-color 0.3s, transform 0.3s; /* Transições suaves para as mudanças de cor e tamanho */
+}
+
+#bot:hover {
+    background-color: #c4983b; /* Cor de fundo ao passar o cursor */
+    transform: scale(1.05); /* Aumenta ligeiramente o tamanho do botão */
+}
+
+/* Efeito ao focar no botão (ex: usando o teclado) */
+#bot:focus {
+    outline: none; /* Remove a borda de foco padrão */
+    box-shadow: 0 0 0 3px rgba(0, 255, 0, 0.5); /* Adiciona uma borda de foco customizada */
 }
 
 /* Conteúdo */
@@ -72,9 +93,57 @@ header {
     text-align: center;
 }
 
+.container {
+    display: flex;
+    align-items: flex-start; /* Alinha a imagem e o texto no topo */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Estilo da imagem */
+#mulher {
+    width: 40%; /* Ajusta a largura da imagem */
+    height: auto; /* Mantém a proporção da imagem */
+    margin-right: 20px; /* Espaço entre a imagem e o texto */
+}
+
+/* Container do texto */
+.texto {
+    flex: 1; /* Faz com que o contêiner do texto ocupe o espaço restante */
+}
+
+/* Estilo do texto */
+.text2 {
+    font-size: 1rem; /* Tamanho padrão da fonte do parágrafo */
+    text-align: justify;
+    white-space: pre-line;
+    margin-left: 10%;
+    margin-top: 15%;
+}
+
+#tv {}
+
+.text3 {
+    margin-top: 5%;
+    font-size: 1rem; /* Tamanho padrão da fonte do parágrafo */
+    text-align: justify;
+    white-space: pre-line;
+}
+
+#mulher2 {
+    margin-top: -9%;
+}
+
+h2 {
+    margin-right: 20%;
+}
+
+
+
+
 /* Footer */
 footer {
-    background-color: #030a12;
+    background-color: #0c1929;
     color: white;
     text-align: center;
     padding: 7.5px 0;
