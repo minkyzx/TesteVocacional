@@ -136,6 +136,7 @@ header {
 
 h2 {
     margin-right: 20%;
+    font-family: Lemon;
 }
 
 
@@ -155,7 +156,7 @@ footer {
 /* Fontes */
 @font-face {
     font-family: Lemon;
-    src: url(HowdyLemon.otf);
+    src: url(assets/font/HowdyLemon.otf);
 }
 
 

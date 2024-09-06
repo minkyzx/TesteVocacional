@@ -4,91 +4,161 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teste Vocacional</title>
+    <link rel="stylesheet" href="assets/css/teste.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let currentQuestion = 0;
+            const questions = document.querySelectorAll(".question-container");
+            const form = document.querySelector("form");
+            const nextButton = document.querySelector("#next-button");
+            const prevButton = document.querySelector("#prev-button");
+            const submitButton = document.querySelector("input[type='submit']");
+
+            function showQuestion(index) {
+                questions.forEach((question, i) => {
+                    question.classList.toggle("hidden", i !== index);
+                });
+                prevButton.classList.toggle("hidden", index === 0);
+                nextButton.classList.toggle("hidden", index === questions.length - 1);
+                submitButton.classList.toggle("hidden", index !== questions.length - 1);
+            }
+
+            function handleSubmit(event) {
+                // Verifica se todas as perguntas foram respondidas
+                for (let i = 0; i < questions.length; i++) {
+                    const question = questions[i];
+                    const radioButtons = question.querySelectorAll('input[type="radio"]');
+                    const checked = Array.from(radioButtons).some(rb => rb.checked);
+                    if (!checked) {
+                        alert('Por favor, responda todas as perguntas antes de enviar.');
+                        event.preventDefault();
+                        return;
+                    }
+                }
+            }
+
+            form.addEventListener("submit", handleSubmit);
+
+            showQuestion(currentQuestion);
+
+            nextButton.addEventListener("click", function() {
+                if (currentQuestion < questions.length - 1) {
+                    currentQuestion++;
+                    showQuestion(currentQuestion);
+                }
+            });
+
+            prevButton.addEventListener("click", function() {
+                if (currentQuestion > 0) {
+                    currentQuestion--;
+                    showQuestion(currentQuestion);
+                }
+            });
+        });
+    </script>
 </head>
 <body>
-    <h1>Teste Vocacional</h1>
-    <form action="resultado.php" method="post">
-        <p>1. Você gosta de resolver problemas complexos e encontrar soluções criativas?</p>
-        <input type="radio" name="q1" value="1"> Sim
-        <input type="radio" name="q1" value="0"> Não
+    <header>
+        <img id="logo" src="assets/img/LogoFAMEC.png" alt="logo">
+    </header>
 
-        <p>2. Você é bom em trabalhar em equipe e colaborar com outros?</p>
-        <input type="radio" name="q2" value="1"> Sim
-        <input type="radio" name="q2" value="0"> Não
+    <main>
+        <?php
+        // Inicialização da mensagem de resultado e do curso recomendado
+        $mensagem = '';
+        $cursoRecomendado = '';
 
-        <p>3. Você tem habilidades de comunicação eficazes e pode se expressar claramente?</p>
-        <input type="radio" name="q3" value="1"> Sim
-        <input type="radio" name="q3" value="0"> Não
+        // Definição das respostas associadas a cada curso
+        $associacaoRespostasCursos = [
+            'Direito' => [0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0],
+            'Enfermagem' => [1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0],
+            'Psicologia' => [0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1],
+            'Administração' => [0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1],
+            'Logística' => [0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
+            'Pedagogia' => [1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1],
+            'Ciências Contábeis' => [0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0],
+            'Recursos Humanos' => [0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1]
+        ];
 
-        <p>4. Você é interessado em entender o comportamento humano e como as pessoas se desenvolvem?</p>
-        <input type="radio" name="q4" value="1"> Sim
-        <input type="radio" name="q4" value="0"> Não
+        // Processar o formulário
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $respostas = [];
+            for ($i = 1; $i <= 20; $i++) {
+                $respostas[] = isset($_POST['q' . $i]) && $_POST['q' . $i] == '0' ? 0 : 1;
+            }
 
-        <p>5. Você gosta de trabalhar com números e análise de dados?</p>
-        <input type="radio" name="q5" value="1"> Sim
-        <input type="radio" name="q5" value="0"> Não
+            $melhorCurso = null;
+            $pontuacaoMaxima = -1;
 
-        <p>6. Você é bom em gerenciar projetos e priorizar tarefas?</p>
-        <input type="radio" name="q6" value="1"> Sim
-        <input type="radio" name="q6" value="0"> Não
+            foreach ($associacaoRespostasCursos as $curso => $respostasCurso) {
+                $pontuacao = 0;
+                foreach ($respostasCurso as $index => $resposta) {
+                    if ($resposta == $respostas[$index]) {
+                        $pontuacao++;
+                    }
+                }
+                // Atualiza o melhor curso se a pontuação for maior
+                if ($pontuacao > $pontuacaoMaxima) {
+                    $pontuacaoMaxima = $pontuacao;
+                    $melhorCurso = $curso;
+                }
+            }
 
-        <p>7. Você tem habilidades de liderança e pode motivar os outros?</p>
-        <input type="radio" name="q7" value="1"> Sim
-        <input type="radio" name="q7" value="0"> Não
+            if ($melhorCurso) {
+                $mensagem = "O curso recomendado para você é: <strong>" . $melhorCurso . "</strong>";
+            }
+        }
+        ?>
 
-        <p>8. Você é interessado em entender como as organizações funcionam e como podem ser melhoradas?</p>
-        <input type="radio" name="q8" value="1"> Sim
-        <input type="radio" name="q8" value="0"> Não
+        <?php if ($mensagem): ?>
+            <h2>Resultado</h2>
+            <p class='question-container'><?php echo $mensagem; ?></p>
+        <?php else: ?>
+            <form action="" method="post">
+                <?php
+                // Definição das perguntas e respostas
+                $perguntas = [
+                    'Você gosta de resolver problemas complexos e encontrar soluções criativas?',
+                    'Você é bom em trabalhar em equipe e colaborar com outros?',
+                    'Você tem habilidades de comunicação eficazes e pode se expressar claramente?',
+                    'Você é interessado em entender o comportamento humano e como as pessoas se desenvolvem?',
+                    'Você gosta de trabalhar com números e análise de dados?',
+                    'Você é bom em gerenciar projetos e priorizar tarefas?',
+                    'Você tem habilidades de liderança e pode motivar os outros?',
+                    'Você é interessado em entender como as organizações funcionam e como podem ser melhoradas?',
+                    'Você gosta de trabalhar com pessoas e ajudá-las a alcançar seus objetivos?',
+                    'Você é bom em resolver conflitos e encontrar soluções pacíficas?',
+                    'Você tem habilidades de planejamento e pode criar estratégias eficazes?',
+                    'Você é interessado em entender como as leis e regulamentações afetam a sociedade?',
+                    'Você gosta de trabalhar em um ambiente dinâmico e em constante mudança?',
+                    'Você é bom em trabalhar com tecnologia e sistemas de informação?',
+                    'Você tem habilidades de análise crítica e pode avaliar informações de forma objetiva?',
+                    'Você é interessado em entender como as pessoas aprendem e se desenvolvem?',
+                    'Você gosta de trabalhar em um ambiente de equipe e colaborar com outros profissionais?',
+                    'Você é bom em gerenciar recursos e priorizar gastos?',
+                    'Você tem habilidades de comunicação escrita e pode criar relatórios eficazes?'
+                ];
 
-        <p>9. Você gosta de trabalhar com pessoas e ajudá-las a alcançar seus objetivos?</p>
-        <input type="radio" name="q9" value="1"> Sim
-        <input type="radio" name="q9" value="0"> Não
+                // Gerar o HTML das perguntas
+                foreach ($perguntas as $index => $pergunta) {
+                    $questao = 'q' . ($index + 1);
+                    echo "<div class='question-container'>";
+                    echo "<p>" . ($index + 1) . ". $pergunta</p>";
+                    echo "<input type='radio' name='$questao' value='0' required> Sim ";
+                    echo "<input type='radio' name='$questao' value='1'> Não";
+                    echo "</div>";
+                }
+                ?>
 
-        <p>10. Você é bom em resolver conflitos e encontrar soluções pacíficas?</p>
-        <input type="radio" name="q10" value="1"> Sim
-        <input type="radio" name="q10" value="0"> Não
+                <button type="button" id="prev-button" class="hidden">Anterior</button>
+                <button type="button" id="next-button">Próxima</button>
+                <input type="submit" value="Enviar" class="hidden">
+            </form>
+        <?php endif; ?>
+    </main>
 
-        <p>11. Você tem habilidades de planejamento e pode criar estratégias eficazes?</p>
-        <input type="radio" name="q11" value="1"> Sim
-        <input type="radio" name="q11" value="0"> Não
-
-        <p>12. Você é interessado em entender como as leis e regulamentações afetam a sociedade?</p>
-        <input type="radio" name="q12" value="1"> Sim
-        <input type="radio" name="q12" value="0"> Não
-
-        <p>13. Você gosta de trabalhar em um ambiente dinâmico e em constante mudança?</p>
-        <input type="radio" name="q13" value="1"> Sim
-        <input type="radio" name="q13" value="0"> Não
-
-        <p>14. Você é bom em trabalhar com tecnologia e sistemas de informação?</p>
-        <input type="radio" name="q14" value="1"> Sim
-        <input type="radio" name="q14" value="0"> Não
-
-        <p>15. Você tem habilidades de análise crítica e pode avaliar informações de forma objetiva?</p>
-        <input type="radio" name="q15" value="1"> Sim
-        <input type="radio" name="q15" value="0"> Não
-
-        <p>16. Você é interessado em entender como as pessoas aprendem e se desenvolvem?</p>
-        <input type="radio" name="q16" value="1"> Sim
-        <input type="radio" name="q16" value="0"> Não
-
-        <p>17. Você gosta de trabalhar em um ambiente de equipe e colaborar com outros profissionais?</p>
-        <input type="radio" name="q17" value="1"> Sim
-        <input type="radio" name="q17" value="0"> Não
-
-        <p>18. Você é bom em gerenciar recursos e priorizar gastos?</p>
-        <input type="radio" name="q18" value="1"> Sim
-        <input type="radio" name="q18" value="0"> Não
-
-        <p>19. Você tem habilidades de comunicação escrita e pode criar relatórios eficazes?</p>
-        <input type="radio" name="q19" value="1"> Sim
-        <input type="radio" name="q19" value="0"> Não
-
-        <p>20. Você é interessado em entender como as organizações podem ser mais eficientes e eficazes?</p>
-        <input type="radio" name="q20" value="1"> Sim
-        <input type="radio" name="q20" value="0"> Não
-
-        <input type="submit" value="Enviar">
-    </form>
+    <footer>
+        <p>&copy; 2024 Teste Vocacional. Todos os direitos reservados.</p>
+    </footer>
 </body>
 </html>

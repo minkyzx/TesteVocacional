@@ -1,12 +1,16 @@
+/* styles.css */
+
+/* Estilo básico para o corpo da página */
 body {
     font-family: Arial, sans-serif;
+    line-height: 1.6;
     margin: 0;
     padding: 0;
 }
 
-/* Cabeçalho */
+/* Estilo para o cabeçalho */
 header {
-    background-color: #030a12;
+    background-color: #0c1929;
     color: white;
     padding: 25px;
     text-align: center;
@@ -18,14 +22,59 @@ header {
     height: auto; /* Mantém a proporção do logo */
 }
 
-/* Footer */
+/* Estilo para o conteúdo principal */
+main {
+    padding: 15%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Estilo para o formulário */
+form {
+    background: #f87676;
+    padding: 5%;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.question-container {
+    margin-bottom: 20px;
+}
+
+.question-container p {
+    margin: 0 0 10px 0;
+}
+
+input[type="radio"] {
+    margin-right: 10px;
+}
+
+button, input[type="submit"] {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    background: #007bff;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+button:hover, input[type="submit"]:hover {
+    background: #0056b3;
+}
+
+/* Estilo para o rodapé */
 footer {
-    background-color: #030a12;
+    background-color: #0c1929;
     color: white;
     text-align: center;
     padding: 7.5px 0;
     position: relative;
     bottom: 0;
     width: 100%;
-    
+}
+
+/* Classe para esconder elementos */
+.hidden {
+    display: none;
 }
