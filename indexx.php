@@ -70,7 +70,7 @@
         $cursoRecomendado = '';
         $descricaoCurso = '';
 
-        // Definição das respostas associadas a cada curso e suas descrições
+        // respostas associadas a cada curso e suas descrições
         $associacaoRespostasCursos = [
             'Direito' => [
                 'respostas' => [0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0],
@@ -182,7 +182,7 @@
         <?php else: ?>
             <form action="" method="post">
                 <?php
-                // Definição das perguntas e respostas
+                // perguntas e respostas
                 $perguntas = [
                     'Você gosta de resolver problemas complexos e encontrar soluções criativas?',
                     'Você é bom em trabalhar em equipe e colaborar com outros?',
