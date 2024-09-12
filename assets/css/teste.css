@@ -1,19 +1,26 @@
-/* styles.css */
-
 /* Estilo básico para o corpo da página */
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow-x: hidden; /* Previne rolagem horizontal */
+}
+
+/* Garantir que o body ocupe toda a altura da tela e não tenha margens padrão */
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    margin: 0;
-    padding: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Estilo para o cabeçalho */
 header {
     background-color: #0c1929;
     color: white;
-    padding: 25px;
+    padding: 20px;
     text-align: center;
+    width: 100%; /* Garante que o cabeçalho não exceda a largura da tela */
+    box-sizing: border-box; /* Inclui o padding na largura total */
 }
 
 #logo {
@@ -24,43 +31,125 @@ header {
 
 /* Estilo para o conteúdo principal */
 main {
-    padding: 15%;
+    display: flex; /* Usar flexbox para centralizar o conteúdo */
+    flex-direction: column;
+    align-items: center; /* Centraliza horizontalmente */
+    justify-content: center; /* Centraliza verticalmente */
+    padding: 20px;
     max-width: 800px;
     margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    flex: 1;
+    box-sizing: border-box; /* Inclui o padding na largura total */
+    position: relative;
 }
 
 /* Estilo para o formulário */
 form {
-    background: #f87676;
-    padding: 5%;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-sizing: border-box; /* Inclui o padding na largura total */
+    width: 100%; /* Garante que o formulário não ultrapasse o contêiner */
+    max-width: 600px; /* Limita a largura máxima do formulário */
+    height: auto; /* Ajusta a altura do formulário conforme o conteúdo */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
 }
 
+/* Container para as perguntas */
 .question-container {
+    width: 100%;
+    max-height: 300px; /* Define a altura máxima das perguntas */
+    overflow-y: auto; /* Adiciona rolagem se necessário */
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
+/* Estilo das perguntas */
 .question-container p {
     margin: 0 0 10px 0;
+    font-weight: bold;
 }
 
-input[type="radio"] {
-    margin-right: 10px;
+/* Estilo dos botões de resposta */
+.question-container .answer-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.question-container .answer-buttons label {
+    display: inline-flex;
+    align-items: center;
+    margin: 0 10px; /* Espaço entre os botões */
+    padding: 10px 20px;
+    border-radius: 4px;
+    background-color: #007bff; /* Cor uniforme para ambos os botões */
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    flex: 1;
+    text-align: center;
+}
+
+.question-container .answer-buttons label:hover {
+    background-color: #0056b3; /* Cor ao passar o mouse */
+    transform: scale(1.05);
+}
+
+.question-container .answer-buttons input[type="radio"] {
+    display: none; /* Esconde os inputs radio */
+}
+
+/* Estilo para os botões de navegação */
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 600px; /* Mantém a largura do contêiner dos botões */
+    margin-top: 20px; /* Espaço acima dos botões de navegação */
 }
 
 button, input[type="submit"] {
-    padding: 10px 15px;
+    padding: 10px 20px;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     color: #fff;
-    background: #007bff;
+    background: #08417e; /* Cor dos botões de navegação */
     cursor: pointer;
-    margin-right: 10px;
+    transition: background-color 0.3s, transform 0.3s;
+    font-weight: bold;
 }
 
 button:hover, input[type="submit"]:hover {
-    background: #0056b3;
+    background: #0056b3; /* Cor ao passar o mouse */
+    transform: scale(1.05);
+}
+
+/* Esconde elementos com a classe 'hidden' */
+.hidden {
+    display: none;
+}
+
+/* Estilo para o resultado */
+.result-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px 0;
+    text-align: center;
+    padding: 20px;
+    background: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 /* Estilo para o rodapé */
@@ -68,13 +157,57 @@ footer {
     background-color: #0c1929;
     color: white;
     text-align: center;
-    padding: 7.5px 0;
-    position: relative;
-    bottom: 0;
+    padding: 10px;
     width: 100%;
+    box-sizing: border-box; /* Inclui o padding na largura total */
+    position: absolute;
+    bottom: 0;
 }
 
-/* Classe para esconder elementos */
-.hidden {
-    display: none;
+/* Consultas de mídia para responsividade */
+@media (max-width: 768px) {
+    /* Ajustes para dispositivos com largura de tela até 768px */
+    .question-container {
+        max-height: 200px; /* Ajusta a altura máxima das perguntas */
+    }
+
+    form {
+        padding: 15px;
+        height: auto; /* Ajusta a altura do formulário conforme o conteúdo */
+    }
+
+    .question-container .answer-buttons label {
+        padding: 8px 15px;
+        font-size: 14px; /* Ajusta o tamanho da fonte */
+    }
+
+    .navigation-buttons button, .navigation-buttons input[type="submit"] {
+        padding: 8px 15px;
+        font-size: 14px; /* Ajusta o tamanho da fonte */
+    }
+}
+
+@media (max-width: 480px) {
+    /* Ajustes para dispositivos com largura de tela até 480px */
+    header, footer {
+        padding: 10px;
+    }
+
+    .question-container {
+        max-height: 150px; /* Ajusta a altura máxima das perguntas */
+    }
+
+    form {
+        padding: 10px;
+    }
+
+    .question-container .answer-buttons label {
+        padding: 6px 12px;
+        font-size: 12px; /* Ajusta o tamanho da fonte */
+    }
+
+    .navigation-buttons button, .navigation-buttons input[type="submit"] {
+        padding: 6px 12px;
+        font-size: 12px; /* Ajusta o tamanho da fonte */
+    }
 }

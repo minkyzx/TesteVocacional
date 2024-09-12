@@ -18,7 +18,7 @@
         <h3 class="text">Sabe aquela ajuda que faltava para
         você escolher qual carreira seguir?</h3>
         <p class="text">Faça o teste vocacional da FAMEC e descubra o seu maior talento.</p>
-        <a href="teste.php"><button id="bot">Fazer teste vocacional</button></a>
+        <a href="indexx.php"><button id="bot">Fazer teste vocacional</button></a>
     </div>
     </div>
 
