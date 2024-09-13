@@ -64,7 +64,7 @@ form {
 
 /* Container para as perguntas */
 .question-container {
-    width: 100%;
+    width: 550px;
     max-height: 300px; /* Define a altura máxima das perguntas */
     overflow-y: auto; /* Adiciona rolagem se necessário */
     margin-bottom: 20px;
