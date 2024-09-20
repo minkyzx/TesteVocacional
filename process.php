@@ -120,6 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $resultado_teste = $_SESSION['resultado_teste'];
 
+<<<<<<<< HEAD:process.php
         // Salvar no banco de dados
         $stmt = $conn->prepare("INSERT INTO usuarios (nome, email, telefone) VALUES (?, ?, ?)");
         $stmt->execute([$nome, $email, $telefone]);
@@ -130,3 +131,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['success' => true, 'resultado' => $resultado_teste['curso']]);
     }
 }
+========
+    <footer>
+        <p>&copy; 2024 Teste Vocacional - FAMEC. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>
+>>>>>>>> 38300f1d25da00d89d1ae7faf1a9ac4d1cb8eaa5:testev.php
