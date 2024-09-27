@@ -1,132 +1,76 @@
 <?php
-// Iniciar sessão
 session_start();
+include 'database.php';
 
-// Conectar ao banco de dados
-try {
-    $pdo = new PDO("mysql:host=localhost;dbname=testevocacional", "root", "");
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Erro de conexão: " . $e->getMessage());
-}
+$answers = $_SESSION['answers'];
+$nome = $_POST['nome'];
+$email = $_POST['email'];
+$telefone = $_POST['telefone'];
 
-// D ados do formulário
-if (isset($_POST['submit_cadastro'])) {
-    $nome = $_POST['nome'];
-    $email = $_POST['email'];
-    $telefone = $_POST['telefone'];
+// Cursos e suas respectivas respostas e descrições
+$cursos = [
+    'Direito' => [
+        'respostas' => [0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0],
+        'descricao' => 'O curso de Direito forma profissionais capacitados para atuar na área jurídica, com uma duração média de cinco anos. Seu objetivo principal é preparar os alunos para compreender e interpretar as leis, desenvolvendo habilidades de argumentação e análise crítica. O currículo abrange disciplinas como Direito Civil, Penal, Constitucional e Administrativo, preparando os graduados para diversas carreiras, como advogados, juízes e promotores. Além de fornecer um conhecimento profundo do sistema legal, o curso também incentiva a ética profissional e a empatia, tornando os formados agentes importantes na promoção da justiça e defesa dos direitos na sociedade.'
+    ],
+    'Enfermagem' => [
+        'respostas' => [1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0],
+        'descricao' => 'O curso de Enfermagem é voltado para a formação de profissionais que atuam na promoção, prevenção e recuperação da saúde. Com duração média de quatro anos, os alunos aprendem sobre anatomia, fisiologia, farmacologia e técnicas de atendimento ao paciente. O curso combina aulas teóricas com práticas em laboratórios e estágios em hospitais e clínicas. Os enfermeiros desempenham um papel crucial na assistência a pacientes, realizando procedimentos, administrando medicamentos e orientando famílias sobre cuidados de saúde. Ao se formarem, os graduados podem trabalhar em diversas áreas, como hospitais, clínicas, unidades de saúde, e também em gestão e ensino.'
+    ],
+    'Psicologia' => [
+        'respostas' => [0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1],
+        'descricao' => 'O curso de Psicologia é destinado ao estudo do comportamento humano e dos processos mentais. Com uma duração média de cinco anos, os estudantes exploram áreas como desenvolvimento humano, psicopatologia, psicologia social e técnicas de intervenção terapêutica. O curso combina teoria e prática, com disciplinas que abrangem desde a pesquisa em psicologia até estágios supervisionados em contextos clínicos e organizacionais. Os psicólogos são profissionais capacitados para compreender e ajudar pessoas a lidar com questões emocionais, comportamentais e sociais, atuando em clínicas, hospitais, escolas, empresas e em pesquisas.'
+    ],
+    'Administração' => [
+        'respostas' => [0, 1, 1, 1 , 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        'descricao' => 'O curso de Administração forma profissionais capacitados para gerenciar e otimizar o funcionamento de organizações. Ao longo da graduação, os alunos aprendem sobre áreas fundamentais como finanças, marketing, recursos humanos e logística. O curso enfatiza o desenvolvimento de habilidades de liderança, tomada de decisões e resolução de problemas, preparando os estudantes para enfrentar os desafios do ambiente corporativo. Os graduados podem atuar em diversos setores, incluindo empresas privadas, públicas, startups e até mesmo abrir seus próprios negócios, contribuindo para o crescimento e a inovação nas organizações.'
+    ],
+    'Logística' => [
+        'respostas' => [1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0],
+        'descricao' => 'O curso de Logística capacita profissionais a planejar, implementar e controlar a movimentação e o armazenamento de bens e serviços de forma eficiente. Os alunos aprendem sobre gestão de cadeias de suprimentos, transporte, distribuição, e estratégias de redução de custos. O curso combina teoria e prática, abordando ferramentas tecnológicas e metodologias para otimizar processos logísticos. Graduados em Logística podem atuar em diversas áreas, como transportadoras, empresas de varejo, indústrias e consultorias, contribuindo para a melhoria da eficiência operacional e a satisfação do cliente.'
+    ],
+    'Pedagogia' => [
+        'respostas' => [0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0],
+        'descricao' => 'O curso de Pedagogia forma profissionais capacitados para atuar na área da educação, preparando-os para trabalhar em diversas instituições de ensino, como escolas, creches e centros de formação. Os estudantes aprendem sobre teorias educacionais, práticas pedagógicas, psicologia do desenvolvimento e gestão escolar. Além disso, o curso aborda temas como inclusão, diversidade e metodologias de ensino. Os pedagogos desempenham papéis fundamentais na elaboração de currículos, na orientação de professores e na promoção de um ambiente de aprendizado eficaz, contribuindo para a formação integral dos alunos e o desenvolvimento da sociedade.'
+    ],
+    'Ciências Contábeis' => [
+        'respostas' => [1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0],
+        'descricao' => 'O curso de Ciências Contábeis tem como objetivo formar profissionais capazes de gerenciar e analisar as finanças de empresas e organizações. Com uma duração média de quatro a cinco anos, o curso abrange disciplinas como Contabilidade Geral, Auditoria, Análise de Balanços, e Gestão Financeira. Os estudantes aprendem a elaborar demonstrações financeiras, realizar auditorias e interpretar dados contábeis para auxiliar na tomada de decisões. Ao final da formação, os graduados podem atuar em diversas áreas, como auditoria, consultoria, controladoria e contabilidade fiscal, contribuindo para a saúde financeira das organizações e a conformidade com a legislação.'
+    ],
+    'Recursos Humanos' => [
+        'respostas' => [1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1],
+        'descricao' => 'O curso de Recursos Humanos prepara profissionais para gerenciar e desenvolver o capital humano dentro das organizações. Os estudantes aprendem sobre recrutamento, seleção, treinamento, avaliação de desempenho e desenvolvimento de carreira. Além disso, o curso abrange temas como legislação trabalhista, relações interpessoais e estratégias de motivação e retenção de talentos. Os profissionais de recursos humanos desempenham um papel essencial na criação de um ambiente de trabalho saudável e produtivo, garantindo que a organização tenha as habilidades e competências necessárias para alcançar seus objetivos, ao mesmo tempo em que promovem o bem-estar dos colaboradores.'
+    ]
+];
 
-    // Obter respostas do formulário
-    $respostas = isset($_SESSION['respostas']) ? $_SESSION['respostas'] : [];
-
-    if (is_array($respostas) && count($respostas) > 0) {
-        $resultado = '';
-        $maiorPontuacao = -1;
-
-        // Definir os cursos e suas respostas esperadas
-        $cursos = [
-            'Direito' => [
-                'respostas' => [0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0],
-                'descricao' => 'O curso de Direito oferece uma compreensão profunda do sistema jurídico e das normas que regem a sociedade. Durante a graduação, os alunos estudam as leis fundamentais que 
-                organizam a vida social e econômica, abordando temas como Direito Constitucional, Civil, Penal e Administrativo.
-                Os estudantes aprendem a analisar e interpretar leis, a entender o funcionamento dos tribunais e a desenvolver habilidades de 
-                argumentação e defesa. A formação em Direito prepara os profissionais para atuar em diversas áreas, como advocacia, consultoria jurídica e funções no setor público. A carreira jurídica exige uma combinação 
-                de conhecimento técnico, habilidades analíticas e um compromisso com a justiça e a equidade.'
-            ],
-            'Enfermagem' => [
-                'respostas' => [1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0],
-                'descricao' => 'O curso de Enfermagem prepara os alunos para oferecer cuidados essenciais à saúde, abrangendo desde a administração de medicamentos até o suporte direto em procedimentos médicos. 
-                Ao longo da graduação, os estudantes 
-                adquirem conhecimentos fundamentais sobre o funcionamento do corpo humano, doenças e as melhores práticas para promover a saúde e a recuperação dos pacientes.
-                A formação em Enfermagem desenvolve habilidades práticas e teóricas, permitindo que os profissionais atuem em diversos contextos, como hospitais, clínicas e unidades de saúde comunitária. A profissão exige não 
-                apenas conhecimento técnico, mas também uma profunda empatia e habilidades de comunicação para oferecer suporte eficaz e humanizado aos pacientes. Os enfermeiros desempenham um papel vital na manutenção da saúde
-                 e no bem-estar das pessoas, contribuindo significativamente para a qualidade do atendimento médico e a recuperação dos pacientes.'
-            ],
-            'Psicologia' => [
-                'respostas' => [0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1],
-                'descricao' => 'O curso de Psicologia é dedicado ao estudo do comportamento humano e dos processos mentais. Ele explora como pensamos, sentimos e agimos,
-                 oferecendo uma compreensão abrangente das emoções e comportamentos. Durante a graduação, os alunos aprendem sobre diversas abordagens teóricas, técnicas de avaliação e intervenções terapêuticas.
-                Os psicólogos podem atuar em várias áreas, como clínica, organizacional, escolar e forense, ajudando pessoas a superar desafios emocionais, promover o bem-estar e melhorar 
-                a qualidade de vida. A formação em Psicologia desenvolve habilidades essenciais, como empatia, comunicação e análise crítica, preparando os profissionais para contribuir de forma significativa na compreensão e no suporte à saúde mental.'
-            ],
-            'Administração' => [
-                'respostas' => [0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1],
-                'descricao' => 'O curso de Administração capacita os alunos a gerir e coordenar organizações, desenvolvendo habilidades essenciais para otimizar recursos 
-                e alcançar objetivos empresariais. Durante a graduação, os estudantes exploram conceitos e práticas fundamentais para a gestão eficiente de empresas e instituições.
-                Os alunos aprendem sobre planejamento estratégico, finanças, marketing, e recursos humanos, adquirindo competências para analisar e resolver problemas organizacionais. A formação 
-                abrange a criação e implementação de estratégias que visam melhorar o desempenho e a competit ividade das organizações.
-                Os profissionais formados em Administração podem atuar em diversos setores, incluindo empresas privadas, instituições públicas e organizações não-governamentais.
-                A carreira exige habilidades analíticas, de liderança e de tomada de decisão, preparando os administradores para enfrentar desafios e contribuir para o sucesso e crescimento das organizações onde atuam.'
-            ],
-            'Logística' => [
-                'respostas' => [0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
-                'descricao' => 'O curso de Logística prepara os alunos para gerenciar e otimizar o fluxo de produtos e serviços dentro e entre organizações. A graduação abrange a coordenação e a supervisão de atividades 
-                essenciais para garantir que bens e serviços cheguem de forma eficiente ao consumidor final.
-                Os estudantes aprendem a planejar e controlar a cadeia de suprimentos, desde o armazenamento e transporte até a distribuição e gestão de inventários. A formação inclui o estudo de técnicas para melhorar a 
-                eficiência operacional, reduzir custos e lidar com a complexidade das operações logísticas.
-                Os profissionais formados em Logística podem atuar em diversos segmentos, como transporte, armazenamento, distribuição e gestão da cadeia de suprimentos. A carreira exige habilidades de análise, organização 
-                e resolução de problemas, permitindo que os especialistas em logística desempenhem um papel crucial na eficiência e sucesso das operações empresariais.'
-            ],
-            'Pedagogia' => [
-                'respostas' => [1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1],
-                'descricao' => 'O curso de Pedagogia prepara os alunos para atuar na educação infantil e nas primeiras séries do ensino fundamental, focando no desenvolvimento e aprendizado das crianças. A graduação oferece 
-                uma compreensão aprofundada dos processos de ensino e aprendizagem, capacitando os futuros pedagogos a criar ambientes educacionais eficazes e inclusivos.
-                Durante o curso, os estudantes exploram teorias educacionais, práticas pedagógicas e estratégias para promover o desenvolvimento cognitivo, emocional e social das crianças. A formação inclui 
-                o estudo de metodologias de ensino, planejamento de atividades e avaliação do progresso dos alunos.
-                Os profissionais formados em Pedagogia podem trabalhar como professores, coordenadores pedagógicos e gestores educacionais em escolas, creches e instituições de ensino. A carreira exige 
-                habilidades de comunicação, criatividade e uma paixão pela educação, permitindo que os pedagogos desempenhem um papel vital na formação e desenvolvimento das novas gerações.'
-            ],
-            'Ciências Contábeis' => [
-                'respostas' => [0, 1, 1, 0, 1,  0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0],
-                'descricao' => 'O curso de Ciências Contábeis forma profissionais capacitados para gerenciar e analisar as finanças de empresas e organizações. Durante a graduação, os alunos estudam princípios contábeis, 
-                normas fiscais e técnicas de auditoria, adquirindo habilidades essenciais para a administração financeira e a tomada de decisões empresariais.
-                Os estudantes aprendem a elaborar e interpretar relatórios financeiros, a realizar auditorias e a garantir a conformidade com as regulamentações fiscais. A formação também aborda a gestão de recursos,
-                planejamento financeiro e controle de custos, preparando os futuros contadores para enfrentar desafios financeiros e otimizar o desempenho econômico das organizações.
-                Os profissionais de Ciências Contábeis podem atuar em diversos setores, incluindo empresas privadas, organizações governamentais e escritórios de contabilidade. A carreira exige habilidades analíticas, atenção aos 
-                detalhes e conhecimento sólido das normas contábeis, permitindo que os contadores desempenhem um papel crucial na saúde financeira e na transparência das organizações onde trabalham.'
-            ],
-            'Recursos Humanos' => [
-                'respostas' => [0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1],
-                'descricao' => 'O curso de Recursos Humanos prepara os alunos para gerenciar o capital humano das organizações, focando na contratação, desenvolvimento e bem-estar dos funcionários. A graduação abrange uma 
-                variedade de práticas e estratégias para otimizar o ambiente de trabalho e garantir que a equipe esteja alinhada com os objetivos organizacionais.
-                Durante o curso, os estudantes aprendem sobre recrutamento e seleção, treinamento e desenvolvimento, gestão de desempenho, e legislação trabalhista. A formação inclui a criação de políticas de recursos humanos, 
-                a resolução de conflitos e a implementação de programas de engajamento e motivação.
-                Os profissionais formados em Recursos Humanos podem atuar em diferentes tipos de organizações, desde empresas privadas e instituições públicas até organizações sem fins lucrativos. A carreira exige habilidades de 
-                comunicação, empatia e capacidade de análise, permitindo que os especialistas em RH desempenhem um papel fundamental no desenvolvimento de uma cultura organizacional positiva e na maximização do potencial dos colaboradores.'
-            ]
-        ];
-
-        // Analisar as respostas
-        foreach ($cursos as $curso => $info) {
-            $pontuacao = 0;
-            foreach ($info['respostas'] as $index => $valorEsperado) {
-                if (isset($respostas[$index]) && $respostas[$index] == $valorEsperado) {
-                    $pontuacao++;
-                }
-            }
-            if ($pontuacao > $maiorPontuacao) {
-                $maiorPontuacao = $pontuacao;
-                $resultado = $curso;
-            }
+// Função para determinar um curso baseado nas respostas
+function determinarCurso($respostas_usuario, $cursos) {
+    foreach ($cursos as $curso => $detalhes) {
+        $respostas_curso = $detalhes['respostas'];
+        // Aqui você pode adicionar lógica para associar o curso a uma resposta específica
+        // Neste exemplo, estamos apenas retornando o curso, mas você pode adicionar a lógica conforme necessário
+        if ($respostas_usuario == $respostas_curso) {
+            return $curso;
         }
-
-        // Armazenar o resultado na sessão
-        $_SESSION['curso_recomendado'] = $resultado;
-
-        // Obter a descrição do curso recomendado
-        $descricaoCurso = isset($cursos[$resultado]['descricao']) ? $cursos[$resultado]['descricao'] : '';
-
-        // Inserir dados no banco de dados
-        $stmt = $pdo->prepare("INSERT INTO resultados (nome, email, telefone, respostas, curso_recomendado, descricao_curso) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$nome, $email, $telefone, implode(',', $respostas), $resultado, $descricaoCurso]);
-
-        // Redirecionar para a página de resultados
-        header("Location: resultado.php");
-        exit();
-    } else {
-        echo "Respostas não encontradas na sessão ou não são um array.";
     }
-} else {
-    echo "Método de requ isição inválido.";
+    // Se nenhuma resposta corresponder, retorne um curso padrão ou aleatório
+    return array_rand($cursos); // Retorna um curso aleatório
 }
+
+// Determinar o curso recomendado antes de salvar no banco de dados
+$curso_recomendado = determinarCurso($answers, $cursos);
+$descricao_curso = $cursos[$curso_recomendado]['descricao'];
+
+// Salvar os resultados no banco de dados
+$sql = "INSERT INTO resultados (nome, email, telefone, respostas, curso_recomendado) VALUES (?, ?, ?, ?, ?)";
+$stmt = $conn->prepare($sql);
+$respostas_serializadas = serialize($answers);
+$stmt->bind_param('sssss', $nome, $email, $telefone, $respostas_serializadas, $curso_recomendado);
+$stmt->execute();
+
+$_SESSION['curso_recomendado'] = $curso_recomendado;
+$_SESSION['descricao_curso'] = $descricao_curso;
+
+header("Location: resultado.php");
+exit();
 ?>

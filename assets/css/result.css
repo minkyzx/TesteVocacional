@@ -1,0 +1,106 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4; /* Cor de fundo clara */
+    color: #333; /* Cor do texto */
+    display: flex; /* Usando flexbox para centralizar */
+    flex-direction: column; /* Direção das colunas */
+    min-height: 100vh; /* Ocupando toda a altura da viewport */
+}
+
+header {
+    background-color: #0c1929; /* Cor do cabeçalho */
+    color: white; /* Cor do texto no cabeçalho */
+    padding: 20px; /* Espaçamento interno */
+    text-align: center; /* Centralizando o texto */
+}
+
+main {
+    flex: 1; /* Fazendo o main ocupar o espaço restante */
+    display: flex; /* Usando flexbox no main */
+    flex-direction: column; /* Direção das colunas */
+    align-items: center; /* Centralizando horizontalmente */
+    justify-content: center; /* Centralizando verticalmente */
+    padding: 20px; /* Espaçamento interno */
+}
+
+.result-container { /* Classe para o contêiner de resultado */
+    background-color: white; /* Cor de fundo do resultado */
+    border-radius: 8px; /* Bordas arredondadas */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    max-width: 600px; /* Largura máxima */
+    width: 100%; /* 100% para garantir que se ajuste em telas pequenas */
+    margin: 20px auto; /* Margens automáticas para centralizar */
+    padding: 20px; /* Espaçamento interno */
+}
+
+h2 {
+    color: #d2b82e; /* Cor do título */
+}
+
+#obg {
+    margin-left: 25%;
+}
+
+footer {
+    background-color: #0c1929; /* Cor do rodapé */
+    color: white; /* Cor do texto no rodapé */
+    text-align: center; /* Centralizando o texto */
+    padding: 10px 0; /* Espaçamento interno */
+    position: relative; /* Posicionando relativo para o rodapé */
+}
+
+button {
+    background-color: #234296; /* Cor do botão */
+    color: white; /* Cor do texto no botão */
+    border: none; /* Removendo bordas */
+    padding: 10px 20px; /* Espaçamento interno do botão */
+    border-radius: 5px; /* Bordas arredondadas */
+    cursor: pointer; /* Cursor de ponteiro ao passar o mouse */
+    font-size: 16px; /* Tamanho da fonte */
+    transition: background-color 0.3s; /* Transição suave para hover */
+    outline: none; /* Removendo o contorno padrão ao focar */
+    margin-top: 20px; /* Margem superior para o botão */
+    margin-left: 35%;
+}
+
+button:hover {
+    background-color: #486adb; /* Cor do botão ao passar o mouse */
+}
+
+/* Justificando apenas o texto da descrição */
+.description {
+    text-align: justify; /* Justificando o texto da descrição */
+}
+
+/* Media Queries para responsividade */
+@media (max-width: 768px) {
+    main {
+        padding: 10px; /* Menos espaçamento em telas menores */
+    }
+
+    .result-container {
+        padding: 15px; /* Menos padding no contêiner de resultado */
+    }
+
+    h2 {
+        font-size: 1.5em; /* Tamanho do título reduzido */
+    }
+
+    button {
+        padding: 10px; /* Menos padding para botões */
+        font-size: 14px; /* Tamanho da fonte reduzido */
+    }
+}
+
+@media (max-width: 480px) {
+    h2 {
+        font-size: 1.2em; /* Tamanho do título ainda menor */
+    }
+
+    button {
+        padding: 8px; /* Menos padding para botões */
+        font-size: 12px; /* Tamanho da fonte reduzido */
+    }
+}
